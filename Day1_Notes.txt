@@ -74,4 +74,12 @@ SQL Basics: Struture Query Lang
 Database Schema : Is one that contains all relevant objects
 
 
+   Truncate                   vs           				    Delete
+1. DDL command					      		      DML command
+2. Cannot restrict no.of rows deleted		 			Can restrict no.of rows to be deleted
+3. Cannot revert /undo truncate						Can revert using rollback
+4. Faster										Slower than Truncate
+5. Retains the structure							Retains the structure
+
+
 

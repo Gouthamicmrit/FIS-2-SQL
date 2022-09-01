@@ -38,3 +38,79 @@ alter table tblemployee
 add constraint unqphone unique(Phone)
 
 insert into tblemployee values(105,'Syed','Male',12500,2,555555)
+
+
+--altering table and adding a column
+alter table tblemployee
+add Phone varchar(15)  -- Thru alter, cannot associate constraints when the table is already having data 
+
+--dropping a column from a table
+alter table tblemployee
+add Email varchar(30)
+
+alter table tblemployee
+drop column Email
+
+update tblEmployee set Phone = '44444444444' where empid=104
+
+update tblDepartment set DeptLocation='Pune' where deptname='HR'
+
+--alter table and add a constraint
+alter table tblemployee
+add constraint unqphone unique(Phone)
+
+insert into tblemployee values(108,'Anjali','Female',12600,3,'888777')
+
+--drop a constraint
+alter table tblemployee
+drop constraint unqphone
+
+--check constraint
+alter table tblemployee
+add constraint salarychk check(Salary>=12000)
+
+--default constraint
+alter table tbldepartment
+add constraint deflocation default 'Hyderabad' for deptlocation
+
+insert into tblDepartment(Deptid,DeptName) values(5,'Operations')
+
+--Enabling or disabling a constraint
+alter table tblemployee
+nocheck constraint salarychk  -- disable
+
+alter table tblemployee
+check constraint salarychk  -- enabling
+
+--dropping a table
+-- syntax drop <object> <object name>
+--drop table <tablename>
+
+--Truncate 
+--truncate table <tablename>
+
+create table dummytable
+(dummyid int identity(1,2), -- takes a seed and an increment value and automatically assigns vales to the column
+dummyname varchar(20),
+dummycity varchar(20))
+
+select * from dummytable
+
+sp_help dummytable
+insert into dummytable values('newdata','Delhi'),('gfghhj','dfgh'),('aaa','bbb')
+truncate table dummytable  -- deletes all records but retains the table structure with all constraints as it is
+
+drop table dummytable  -- drops the object from the database schema itself
+
+delete from dummytable 
+
+--setting the implicit transactions off
+set implicit_transactions off
+
+begin transaction
+ select * from dummytable
+ delete from dummytable
+ select * from dummytable
+  commit
+
+ select * from dummytable
