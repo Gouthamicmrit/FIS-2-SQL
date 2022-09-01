@@ -1,0 +1,40 @@
+create database FIS2DB
+
+use Fis2DB
+
+create table tblDepartment(
+Deptid int primary key,
+DeptName varchar(20)not null,
+DeptLocation nvarchar(30)
+)
+create table tblEmployee
+(Empid int primary key,
+Empname varchar(30),
+Gender char(7),
+Salary float,
+Deptid int references tblDepartment(Deptid)  --foreign key declaration /*  */
+)
+sp_help tbldepartment
+sp_help tblemployee
+
+select * from tblDepartment
+select * from tblemployee
+
+insert into tblDepartment(Deptid,DeptName) values(1,'IT')
+insert into tblDepartment values(5,null,'Bangalore') --trying to insert null in a non null column
+insert into tblDepartment values(3,'Sales','Mumbai'),(4,'Admin','Chennai')
+
+insert into tblEmployee values(103,'Ashwini D','Female',12200,2),
+(104,'Pooja','Female',12400,1),(102,'Tanishq','Male',12300,1),
+(101,'Pardha','Male',12500,3)
+--altering table and adding a column
+alter table tblemployee
+add Phone varchar(15)  -- Thru alter, cannot associate constraints when the table is already having data 
+
+update tblEmployee set Phone = '44444444444' where empid=104
+
+--alter table and add a constraint
+alter table tblemployee
+add constraint unqphone unique(Phone)
+
+insert into tblemployee values(105,'Syed','Male',12500,2,555555)
