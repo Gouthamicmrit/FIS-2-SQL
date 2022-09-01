@@ -82,4 +82,14 @@ Database Schema : Is one that contains all relevant objects
 5. Retains the structure							Retains the structure
 
 
+RDBMS is based on Relational Algebra/set Theory
+
+Selection/Restriction  - where 
+Projection - specifying the column list
+Join
+Difference
+Divide
+Union
+
+
 
