@@ -80,3 +80,67 @@ select * from sampletable
 
 --dropping an index
 drop index sampletable.idxsid
+
+create clustered index idxclsid on sampletable(sampleid)
+drop index sampletable.idxclsid
+
+create unique clustered index idxcls_sid on sampletable(sampleid)
+drop index sampletable.idxcls_sid
+delete from sampletable
+
+drop index sampletable.idxcity
+create nonclustered index idxcity on sampletable(city)
+
+select * from sampletable where city ='Ahmedabad'
+
+--grouping/categorization of tuples in a table using group by clause
+select avg(salary) from tblemployee
+--department wise average salary
+
+select * from tblEmployee order by deptid
+select deptid as DepartmentNo,avg(salary) AverageSalary from tblemployee
+group by deptid
+--rules
+--group by can be applied to multiple columns
+--cannot group by an alias column
+--all columns in the select list other than the aggregates have to be included in the group by clause
+
+select Deptid,avg(salary) AverageSalary, sum(salary) TotalSalary  from tblemployee
+group by deptid
+
+--list dept wise maximum salary
+select deptid,salary from tblemployee order by deptid
+select deptid, max(salary) from tblemployee group by deptid
+
+--list the no.of male and female employees
+select gender,count(gender) from tblemployee
+group by gender
+order by gender desc
+
+--find all departments that have average salary > 12350
+select deptid,avg(salary) as Average from tblemployee
+where deptid is not null
+group by deptid
+having avg(salary)>12350
+order by Average desc
+
+--joins
+--Equi Join/Natural Join/Inner Join
+--Cross Join  - cartesian product
+--Self Join  - a table joining with itself
+--Outer Join
+     -- left outer
+	 -- right outer
+	 -- full outer
+	 select * from tblDepartment
+	 select * from tblEmployee
+--inner joins/equi
+select * from tblemployee, tblDepartment where tblEmployee.Deptid=tblDepartment.Deptid
+
+select * from tblemployee t1 inner join tblDepartment t2 on t1.Deptid=t2.deptid 
+--cross join
+select * from tblEmployee,tblDepartment
+
+select * from tblDepartment cross join tblEmployee
+
+--self Joins

@@ -10,3 +10,16 @@ are of 2 types
                           can have many non clustered index/s per table
                           allows duplicates
   - Unique Non clustered : does not allow duplicates
+
+Group By clause
+
+Select
+from
+where
+group by
+having
+order by
+
+where 					vs				having
+used to restrict no. of rows				     used to restrict no.of groups
+works before formation of group				having works after formation of group
