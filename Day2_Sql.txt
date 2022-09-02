@@ -1,0 +1,82 @@
+select * from tblemployee
+
+insert into tblemployee values(109,'Neha','Female',12500,4,1234567)
+
+select count(deptid) from tblemployee  --excludes null
+select count(*)deptid from tblemployee  -- includes null
+
+select distinct(deptid) from tblemployee --excludes duplicates
+
+select distinct(salary) from tblemployee
+
+--find all employees who earn more than the average salary of all employees
+select avg(salary) from tblemployee
+
+select * from tblemployee
+where salary >12361   -- legal query
+
+select * from tblemployee
+where salary >avg(salary)  --illegal as functions cannot be used in the RHS of the where clause
+
+--pattern matching
+--wild card characters used with like operator
+--1. % (substitutes 0,1 or more characters)
+--2. _ (substitutes exactly one character)
+--3. [] (substitutes one character in the given range -either or)
+--4. ^ (negation, not in the given list/range)
+
+select * from tblemployee where empname like 'p%'
+select * from tblemployee where empname like 'p%a'
+
+select * from tblemployee where empname like '_a%'
+
+select * from tblemployee where empname like '%a%'
+select * from tblemployee where empname like '%r'
+select * from tblemployee where empname like 'p_[oyr]%'
+
+select * from tblemployee where phone like '%1'
+select * from tblemployee where empname like '__h%'
+select * from tblemployee where empname like 'a[sne]%'
+
+select * from tblemployee where empname like '%[^h]%'
+select * from tblemployee where empname like '__[^h]%'
+
+select * from tblEmployee where empname like '[^ap]%'
+
+select Empid, Salary from tblemployee where empname like '[^ap]%'
+
+sp_help tblemployee
+
+select * from tblEmployee
+order by empname desc
+
+select * from tblEmployee order by gender ,salary desc
+
+--can sort the data on multiple columns
+--can sort on an alias column
+--can sort on a column that is not included in the select list
+
+select Empid,Empname from tblEmployee order by salary desc
+
+select Empid,Empname,Salary as EmployeeSalary from tblemployee
+order by EmployeeSalary
+
+--understanding indexes
+drop table sampletable
+create table sampletable
+(sampleid int,
+sname varchar(30),
+age int,
+city varchar(25))
+
+sp_help sampletable
+
+create index idxsid on sampletable(sampleid)
+
+insert into sampletable values(13,'hh',21,'Mumbai'),(11,'bb',23,'Bangalore'),
+(15,'cc',22,'Chennai'),(12,'dd',24,'Delhi'),(10,'ee',25,'Pune')
+
+select * from sampletable
+
+--dropping an index
+drop index sampletable.idxsid

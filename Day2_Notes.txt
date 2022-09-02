@@ -1,0 +1,12 @@
+Indexes : An ability of the DBMS to arrange data in a logical manner for faster retrieval. Indexes sort the data permanently
+
+are of 2 types
+ 1. Clustered Index: which sorts the data physically every time a dml operation is performed
+                     can have only one clustered index/per table
+                     automatically gets created whenever a primary key column is defined for a table
+			   can be either unique on non unique, when there is no primary key defined for a table
+
+ 2. Non clustered Index : does not sort the original datain the table, instead creates an index table and sorts the data there
+                          can have many non clustered index/s per table
+                          allows duplicates
+  - Unique Non clustered : does not allow duplicates
