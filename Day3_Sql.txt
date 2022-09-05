@@ -64,3 +64,147 @@ update vWTest set Iname='G' where ID=6 -- query successfully executed wo updatin
 --base table, b'coz, this record is out of scope in the view
 delete from vWTest where ID=6 -- query successfully executed wo deleting the 
 --base table, b'coz, this record is out of scope in the view
+
+--case
+--are of 2 types, simple case, searched case, 
+--else or no else
+create table casetable (Cis int, Cname varchar(10))
+insert into casetable values(1,'Red'),(2,'Blue'),(3,'Green'),(4,'Yellow')
+
+select * from casetable
+--simple case with no else
+select cis,cname,
+case cname
+    when 'Red' then 'It is Danger'
+	when 'Blue' then 'Primary'
+	when 'Green' then 'Success'
+ end as Colors
+ from casetable
+
+ --simple case with else
+select cis,cname,
+case cname
+    when 'Red' then 'It is Danger'
+	when 'Blue' then 'Primary'
+	when 'Green' then 'Success'
+	else 'Alert'
+ end as Colors
+ from casetable
+
+ --searched case w/o else
+ select cis, cname,
+ case 
+    when cname='Red' then 'Danger'
+	when cname='Blue' then 'Primary'
+	when cname='Green' then 'Success'
+end  'Color Descriptions' from casetable
+
+--nested case : in if else clause
+declare @salesmade int,@sal int
+set @salesmade=1
+select @salesmade as 'Total Sales'
+print 'The total sales made is' + ' '+cast(@salesmade as varchar(10))
+select @sal=salary from tblemployee where empid=200
+print 'Employee Banurekha''s Salary is' + cast(@sal as varchar(10))
+if @salesmade>500
+ select 'Bumper Sales'
+else
+ begin
+--print case
+ select case
+    when @salesmade between 0 and 100 then 'Poor Sales'
+	when @salesmade between 101 and 200 then 'OK sales'
+	when @salesmade between 201 and 300 then 'Good sales'
+	else 'No Sales At all'
+  end as 'Sales Details'
+  --end
+ end
+
+ --case within case
+ declare @totalsales int
+ set @totalsales=350
+ select case 
+   when @totalsales>=500 then 'Bumper Sales'
+   when @totalsales<500 then
+    case 
+	  when @totalsales between 0 and 100 then 'Poor Sales'
+	  when @totalsales between 101 and 200 then 'OK sales'
+	  when @totalsales between 201 and 300 then 'Good sales'
+	  when @totalsales between 301 and 500 then 'Very Good Sales'
+	  else 'No Sales At all'
+	end
+  end as 'Sales Details'
+	
+--cast
+select 1+'2'
+select 1+2
+select 1+'a'
+
+select 1 + cast('a' as int)
+
+select cast('05-09-2022' as datetime)
+select cast('Hello World' as datetime)
+
+--isnull() -- takes 2 parameters. first parameter on evaluation to null is replaced by the second parmeter
+select empname, phone from tblemployee
+select * from tblemployee
+select empname,isnull(Phone,100007) from tblemployee
+
+update tblEmployee set phone=isnull(Phone,100007)
+insert into tblemployee values(201,isnull(null,'FIS'),'Others',15000,5,1122334455)
+
+--coalesce() 
+/* Used to handle null values in data records. It evaluates a set of parameters and returns
+the first non-null value
+-can run 2 or more queries as a single query
+-shortcut alternate to case 
+-Since Coalesce is an expression by itself, it can be used in any statement or clause that
+accepts expressions viz. select,where, having
+*/
+
+select coalesce(null,null,null,24,null,45,null)
+
+alter table testview add fname varchar(30)
+select * from testview
+update testview set fname='Varma' where Id=3
+
+select id,iname,fname,coalesce(fname,iname) as 'Fullname' from testview
+
+--the above when written using case
+select id, iname,fname,
+case
+   when fname is not null then fname
+   when fname is null then iname
+   else null
+end as Fullname from testview
+
+--example
+select id,iname,fname,coalesce(id,fname,iname)as 'New Name' from testview
+
+select id,iname,fname,coalesce(fname,convert(varchar(10),id),iname)as 'New Name' from testview
+
+select id,iname,fname,coalesce(fname,cast(id as varchar(5)),iname)as 'New Name' from testview
+
+alter table sampletable  add hourly_rate int
+
+update sampletable set hourly_rate=20 where sampleid =11 or sampleid=13
+
+select * from sampletable
+--simple coalesce
+select sampleid,sname,hourly_rate,coalesce(salary,hourly_rate*12+100) as Compensation from sampletable
+
+select sampleid,sname,coalesce(salary,(hourly_rate*12+100) *
+coalesce(commission,10))as Compensation from sampletable
+
+select isnull(null,null)
+select coalesce(null,null,null,null)
+
+declare @c char(1)  -- declared a type but not assigning any value
+--set @c='a'
+select coalesce(null,null,null,@c)
+
+--multiple isnulls
+select isnull(null,isnull(null,5)) as 'new value'
+
+--coalesce in concatenation
+select iname + ' ' +coalesce(fname,'Mr/Ms. ')+ ' ' as Fullname from testview
