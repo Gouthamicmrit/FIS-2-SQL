@@ -18,3 +18,28 @@ Differences
 1. Coalesce is ANSI compatible and can be used in other SQL Platforms, where as
   isnull() cannot
 2. isnull() can take only 2 inputs as against coalesce that can take many inputs
+
+Relational Algebra: Set Operators
+
+union/union all : 
+Intersect
+Except
+
+Combining one or more queries to produce a final resultset
+The resultset of both thequeries must have the same no,of columns
+The data types of columns in the top and the bottom queries have to be same
+The positions of the columns in the top and bottom queries must be same
+The final resultset can be sorted using order by 
+
+row_number()- just numbers the row in sequence over a 
+rank() - ranks all rows with or without partitions over a sorted column. It gives the same rank to similar data, but skips the next number(gap in numbering)
+dense_rank() - works exactly like rank(), but does not skip numbering
+
+Pivot : Used to generate multi dimensional report
+Is used to transfer the row-wise data into column wise 
+
+Unpivot : Is used to transfer column wise data into row-wise
+
+stdname            Maths      Science       English
+Meher  		85	       70             65
+
