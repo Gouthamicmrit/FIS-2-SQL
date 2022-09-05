@@ -1,0 +1,66 @@
+use fis2db
+--views
+select * from tbldepartment
+select * from tblemployee
+
+create view vWEmployeeByDept
+as
+select Empid,Empname,Salary,DeptName from tblemployee join tblDepartment on
+tblEmployee.Deptid=tblDepartment.Deptid
+
+select * from vWEmployeeByDept
+
+alter view vWITEmployees
+as select Empid,Empname,Salary,Gender,DeptName from tblemployee join tblDepartment on
+tblEmployee.Deptid=tblDepartment.Deptid where tblDepartment.DeptName='IT'
+
+select * from vWITEmployees
+
+insert into vWITEmployees values(110,'Banurekha',13000,'Female','Admin')
+
+insert into vWEmployeeByDept values(110,'Banurekha',13000,'Admin')
+
+create view vWSimple
+as select Empid,Empname,Salary,DeptId from tblemployee
+
+insert into vWSimple values(110,'Banurekha',13000,4,'007') -- unsuccessful due to constraint on phone
+
+update vWSimple set deptid=4 where empid=100  -- success
+
+
+select * from vWEmployeeByDept
+update vWEmployeeByDept set deptname='Sales' where empid=107
+delete from vWEmployeeByDept where empid=200
+
+insert into tblemployee values(200,'Banurekha','Female',13000,4,007)
+update tblEmployee set deptid=5 where empid=200
+
+--views with check option
+create table testview(ID int, Iname varchar(max))
+select * from testview
+insert into testview values(1,'A'),(2,'B'),(3,'C'),(4,'D'),(5,'E')
+
+--creating a view without check option
+create view vWTest
+as select ID,Iname from testview where ID<5
+
+select * from vWTest
+
+--perform dml operations
+insert into vWTest values(6,'F') -- insertion successful
+update vWTest set Iname='G' where ID=6 -- query successfully executed wo updating the 
+--base table, b'coz, this record is out of scope in the view
+delete from vWTest where ID=6 -- query successfully executed wo deleting the 
+--base table, b'coz, this record is out of scope in the view
+
+--view with check option
+alter view vWTest
+as select ID,Iname from testview where ID<5
+with check option
+
+--perform dml operations
+insert into vWTest values(0,'H') -- insertion successful
+update vWTest set Iname='G' where ID=6 -- query successfully executed wo updating the 
+--base table, b'coz, this record is out of scope in the view
+delete from vWTest where ID=6 -- query successfully executed wo deleting the 
+--base table, b'coz, this record is out of scope in the view
