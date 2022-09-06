@@ -85,3 +85,52 @@ insert into Htable values
 select * from Htable
 select cast(lvl as nvarchar(100))as 'Hierarchy Level',loc,loctype from Htable
 order by lvl
+
+--Tree structured queries
+Create table Mytree
+(MID int primary key,
+Mname varchar(30),
+ParentId int foreign key references Mytree(MID))
+
+insert into Mytree select 1,'grandpa',null
+union all select 2,'dad',1
+union all select 3,'me',2
+union all select 4, 'mom',1
+union all select 5,'grandma',null
+union all select 6,'sibling',2
+
+select * from Mytree;
+
+--HQ using the above tree structure
+with family as
+(select MID,Mname,ParentId,lvl=0
+from Mytree where ParentId is null 
+union all
+select t.MID,t.Mname,t.ParentId,lvl=family.lvl+1
+from family inner join MyTree t on t.parentid=family.MID)
+select MID,Mname,Parentid,lvl from family 
+order by lvl
+
+
+use Northwind
+
+select * from customers;
+
+--eg 1 cte
+with cte1 as(select orderId,avg(unitprice) as 'Average_Price' from [Order Details]
+group by OrderID)
+select od.orderid,od.quantity,cte1.Average_Price from [Order Details]od join cte1 on
+od.OrderID=cte1.OrderID
+
+--select cte1.Average_price from cte1
+--eg 2 cte
+with customers_in_usa as(
+select customerid,contactname,city from customers where country='USA')
+select contactname,city from customers_in_usa where city in('Eugene','Portland','Walla Walla')
+
+--eg multiple cte
+with cust_in_USA as(select customerid,contactname,city from customers where country='USA'),
+specific_city as(select contactname,city from cust_in_usa where city in('Eugene','Portland','Walla Walla'))
+select a.customerid,a.contactname,sc.city from cust_in_USA a, specific_city sc
+where a.ContactName=sc.ContactName
+order by a.ContactName

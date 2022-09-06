@@ -89,3 +89,87 @@ There are 3 types of H-Query Syntax
  1. Connect By - Oracle,DB2,Informix,PostgreSql
  2. CTE - MS SQL server 
  3. ANSI SQL
+
+CTE : used to simplify complex joins and subqueries. Used to query the hierarchial data. They are used to generate a named set(temporary table).
+Exists only for the duration of the query. It should always be followed by select,insert,update,delete
+
+Views 						vs					Materialized Views
+-Only Sql Query definitions are stored in the database		Sql Query along with the data is stored in DB
+-No StorageRequired								Data is Stored within the view
+-Latest Data is returned everytime on query				Data is not up to date, and needs periodic refreshing
+-Performance : Same as that of the base table				Performance is Usually faster than views
+-No indexes, uses the base table indexes only				Can create index on materialized views	
+
+Table Partitioning :Dividing the table into simpler,smaller data
+
+Benefits : 
+ 1. Performance Improvements
+ 2. Increases the Availability
+ 3. Helps in storage cost optimization
+ 4. Managing Data becomes easier
+
+When to Partition :
+ 1. Table size > 2 GB	
+ 2. History data coexists with latest data
+ 3. Distribute data across various devices
+ 4. Table performance is going down		
+
+Types of Partitioning:
+1. range partition
+2. list partition
+3. hash partition
+
+create table products(pid numeric,price numeric) partition by range(price)
+(partition p1 values less than(2000),
+partition p2 values between 2001 and 5000
+pARTITIOn p3 less than(maxvalue))
+
+insert into products values(100,3400) -- inserted in p2 partition
+select * from products partition(p2)
+
+partition by list(state)
+partitin by hash(empid) partition 25
+
+--materialized views
+create view matviews with schemabinding
+as
+select e.empid,e.empname,e.salary,d.deptid,d.deptname from
+dbo.tblemployee e join dbo.tbldepartment d on e.deptid=d.deptid
+
+select * from matviews
+
+create unique clustered index matindex on dbo.matviews(deptid,empid)
+
+/* in oracle with one example
+create materialized view dept_empl
+refresh complete
+as select d1.deptid,d1.deptname,count(e1.*)as Employee_Count,sum(e1.salary)as TotalSalary
+from tbldepartment d1 join tblemployee e1 on d1.deptid=e1.deptid
+group by d1.deptid,d1.deptname;*/
+
+alter database fis2db
+add filegroup prods_3
+
+
+select name from sys.filegroups 
+alter database fis2db
+add file (name=prods_1,filename='c:\windows\fis-2-sql\orders_2020.ndf',
+size=10 mb,
+maxsize=unlimited,
+filegrowth=1024 kb)to filegroup prods_1
+
+
+create partition function orders_bydate(date) as range left
+for values('2020-12-31','2021-12-31')
+
+create partition scheme orders_byyear_schema
+as partition orders_bydate to ([prods_1],[prods_2],[prods_3])
+
+create table sales_orders(
+order_date date,
+productname varchar(255),
+amount decimal(10,2)not null default 0,
+primary key(order_date,productname))
+on orders_byyear_schema(order_date)
+
+insert into sales_orders values('2020-08-12','iPhone',121000)
