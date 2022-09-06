@@ -44,3 +44,44 @@ select coalesce(deptid, 100)as Departments, coalesce(gender,'Gender Subtotals')a
 sum(salary) as 'Total Salary' from tblemployee
 group by cube(deptid,gender)
 order by deptid,gender
+
+--Hierarchial Queries
+select sub.empno as 'Subordinate Employee Number',sub.ename as 'Subordinate  Name', 
+sup.empno as 'SupervisorEmployeeId', sup.ename as 'Supervisor Name'
+from emp sub join emp sup on sub.mgr_id=sup.empno
+order by SupervisorEmployeeId
+
+--with CTE (common table expression)
+with mycte (empno,ename,mgr_id,empLevel)
+as (select empno,ename,mgr_id, 1 empLevel  
+from emp where mgr_id is null                    --initial query
+union all
+select e.empno,e.ename,e.mgr_id, mct.empLevel + 1  --recursive query
+from emp e inner join mycte mct on e.mgr_id=mct.empno
+where e.mgr_id is not null)
+select * from mycte 
+order by empLevel
+
+--example 2
+create table Htable(lvl hierarchyid not null,
+loc nvarchar(30) not null,
+loctype nvarchar(10) )
+
+--insert data into the above table
+insert into Htable values
+('/1/','Europe','Continent'),
+('/2/','South America','Continent'),
+('/1/1/', 'France','Country'),
+('/1/1/1/','Paris','City'),
+('/1/2/1/','Madrid','City'),
+('/1/2/','Spain','Country'),
+('/3/','Asia','Continent'),
+('/2/1/','Brazil','Country'),
+('/2/1/1/','Brasilia','City'),
+('/2/1/2/','Bahia','State'),
+('/3/1/','Delhi','City'),
+('/2/1/2/1/','Salvador','City')
+
+select * from Htable
+select cast(lvl as nvarchar(100))as 'Hierarchy Level',loc,loctype from Htable
+order by lvl

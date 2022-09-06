@@ -81,3 +81,11 @@ Data Redundancy is high								Data Redundancy is low
 
 Galaxy Schema : Based on hierarchy levels, more than one fact table, seperate dimensions are possible. Can be built by splitting star into multiple stars. Useful in aggregating the fact tables
 
+Hierarchial queries : Are a form of recursive query to retrieve hierarchy data (eg Organization data-employee reporting to ?)family tree
+
+-If we are using IMS database(IBMs Information Management System), then there is no need for Hierarchial Queries. If using other commercial databases, then we need to write h-queries for hierarchial data
+
+There are 3 types of H-Query Syntax
+ 1. Connect By - Oracle,DB2,Informix,PostgreSql
+ 2. CTE - MS SQL server 
+ 3. ANSI SQL
