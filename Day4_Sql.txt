@@ -1,0 +1,46 @@
+--RollUp operator: is an extension to group by clause. Helps in calculating sub totals and grand totals for
+-- a set of columns passed to the group by Roll up clause. 
+--Generates results in a hierarchial manner
+
+--Cube Operator : Generates  aggregated results that contain all possible combinations for the selected columns
+
+insert into tblemployee values(300,'SampleData','Others',15000,null,90807060)
+select * from tblemployee
+select deptid, sum(salary) from tblemployee group by deptid
+
+--grand total of the total salary
+select deptid as Departments, sum(salary) as Total from tblEmployee
+group by rollup(deptid)
+
+select coalesce(deptid,100)as Departments, sum(salary) as Total from tblEmployee
+group by rollup(deptid)
+
+--sum of employees salaries by dept, gender wise subtotals and grand total
+
+select * from tblemployee order by deptid
+
+select coalesce(deptid, 100)as Departments, coalesce(gender,'Gender Subtotals')as Gender,
+sum(salary) as 'Total Salary' from tblemployee
+group by rollup(deptid,gender)
+
+--w/o coalesce
+select deptid as Departments,gender as Gender,sum(salary)as Total from tblemployee
+group by rollup(deptid,gender)
+
+--w/o rollup and coalesce
+select deptid,gender,sum(salary)as Total from tblemployee
+group by deptid,gender
+order by deptid
+
+--write the above with coalesce (deptid 100), (gender,allgender)
+
+--Cube Operator
+/*1. Salary grouped by both dept and gender
+2. salry grouped by gender alone
+3. Salary grouped by dept alone
+4. grand total of all salary
+ */
+select coalesce(deptid, 100)as Departments, coalesce(gender,'Gender Subtotals')as Gender,
+sum(salary) as 'Total Salary' from tblemployee
+group by cube(deptid,gender)
+order by deptid,gender

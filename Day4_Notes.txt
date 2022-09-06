@@ -1,0 +1,83 @@
+OLAP : Online Analytical Processing. Is a category of software tools that provides analysis of data for business decision. OLAP allows to analyze information from multiple databases
+
+Examples : Sales Figures comparable between
+   months/countries/zones/regions/cities/branches/salesmanwise
+Amazon analyse customers purchase patterns and recommending products on those lines.
+
+note : The primary objective is data analysis and not data processing
+
+OLTP : Online Transaction Processing. Is is service that supports day to day transactions, and also administers the transactions of an organization
+
+A - Atomicity
+C - Concurrency/Consistency
+I - Isolation
+D - Durability
+
+Examples : ATM validations, Card/Pin/OTP/2 way authentication/Transactions
+note : The primary objective of OLTP is data processing and not analysis
+
+OLAP creates a single platform for all types of business analysis, which includes Planning,budgeting, forecasting and analysis, while OLTP is useful for daily transaction management 
+
+OLAP is characterised by large volumes of data, while OLTP is characterised by large number of online transactions
+
+OLAP uses uniquely created datawarehouse, which can integrate with different data sources, while OLTP uses traditional database
+
+Drawbacks/Challenges : Implementation and maintenance are dependent on the IT professionals, since OLAP tools need a complicated modelling procedures.
+OLAP tools need co-operation between people of various departments to be effective, which may not be always possible
+
+Drawbacks/Challenges : If OLTP systems face hardware failures, then online transactions get affected severly. OLTP systems allow multiple users to access, to change the same data at the same time can sometime lead to unprecedented situations
+
+Transactions : Is a Unit of Execution
+      Database Transactions consists of
+    - DML
+    - One DDl
+    - One DCL
+begins when the first transaction statement is executed, and ends when any one of the following occurs 
+      1. Rollback/Commit
+      2. Autocommit
+      3. User Exits
+      4. System Crashes
+
+Fact Table : Stores all quantitative information for analysis, and is often denormalised. It consists of 2 types of columns. The foreign key column that connects to the dimension table, and the other is measure column that contains the data that is being analysed
+
+
+Dimension Table : Stores data about the ways in which the data in the fact table can be analysed
+
+Eg : Fact - Product Sales
+
+Time Info.		Products		Customer		Units Sold
+8.00               1                  4                 15
+8.00               3                  2                  5
+9.14               1                  1                 20
+9.23               2                  4                 7 
+
+Dimension Table
+
+1. Customer Centric
+2. Product centric
+3. Time Centric
+4. Region Specific
+5. Quantity analysis
+
+Various OLAP Systems:
+ 1. HOLAP - Hybrid OLAP
+ 2. MOLAP - Multidimensinal OLAP
+ 3. ROALP - Relational OLAP 
+
+The process of moving from finer granular data to a coarser data is called as Roll Up, and the opposite is called drill down
+
+Star Schema 					vs				Snowflake Schema
+
+1 Fact and Dimensions tables     						Fact, Dimensions, and Sub Dimensions tables
+Top-Down Model									Bottom Up Model
+Uses More Space									Uses Less Space
+Normalization is not used							Normalized and Un normalised data is used
+Design is Simple									Design is complex
+Takes Less time for Query Execution						Takes more time for Query Execution
+Query Complexity is less							Query Complexity is high
+Understanding is easy								Undestranding is difficult
+Less no. of Foreign Keys							More no. of Foreign keys
+Data Redundancy is high								Data Redundancy is low
+
+Galaxy Schema : Based on hierarchy levels, more than one fact table, seperate dimensions are possible. Can be built by splitting star into multiple stars. Useful in aggregating the fact tables
+
